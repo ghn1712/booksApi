@@ -1,6 +1,7 @@
 package com.ghn1712.guiabolso.books.controllers;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 
@@ -22,7 +23,7 @@ public class BooksControllerImpl implements BooksController {
     }
 
     @Override
-    public Book getBook(String id) {
+    public Optional<Book> getBookById(String id) {
         return booksUsecase.getBook(id);
     }
 
