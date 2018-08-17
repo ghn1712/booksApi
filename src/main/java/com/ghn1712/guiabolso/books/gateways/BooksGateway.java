@@ -1,13 +1,8 @@
 package com.ghn1712.guiabolso.books.gateways;
 
-import java.util.List;
-
 import com.ghn1712.guiabolso.books.entities.Book;
 
-
-public interface BooksGateway {
-
-    List<Book> listBooks();
+public interface BooksGateway extends BooksListGateway {
 
     Book getBook(String id);
 
