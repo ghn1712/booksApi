@@ -3,5 +3,8 @@
         "url": "jdbc:postgresql://localhost:4567",
         "user": "postgres",
         "password": "postgres"
+    },
+    "crawlerConfig": {
+        "url": "https://kotlinlang.org/docs/books.html"
     }
 }

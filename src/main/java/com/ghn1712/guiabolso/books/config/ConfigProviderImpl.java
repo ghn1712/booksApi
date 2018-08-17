@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-import com.google.gson.Gson;
+import com.ghn1712.guiabolso.books.serializer.Serializer;
 
 public class ConfigProviderImpl implements ConfigProvider {
 
@@ -17,7 +17,7 @@ public class ConfigProviderImpl implements ConfigProvider {
 
     private Config getConfigFile() throws IOException {
         File file = new File(CONFIG_FILE_NAME);
-        return new Gson().fromJson(new String(Files.readAllBytes(file.toPath())), Config.class);
+        return Serializer.deserialize(new String(Files.readAllBytes(file.toPath())), Config.class);
     }
 
     @Override
