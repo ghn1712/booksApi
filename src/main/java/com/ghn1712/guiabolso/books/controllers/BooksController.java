@@ -1,10 +1,10 @@
-package com.ghn1712.guiabolso.books.usecases;
+package com.ghn1712.guiabolso.books.controllers;
 
 import java.util.List;
 
 import com.ghn1712.guiabolso.books.entities.Book;
 
-public interface BooksUsecase {
+public interface BooksController {
 
     List<Book> listBooks();
 
