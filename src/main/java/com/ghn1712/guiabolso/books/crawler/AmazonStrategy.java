@@ -8,13 +8,15 @@ public class AmazonStrategy implements IsbnStrategy {
 
     @Override
     public String execute(String url) {
+        final String defaultResponse = IsbnStrategy.super.execute(url);
         try {
             return Jsoup.connect(url).get().select("div.content li").eachText().parallelStream()
-                    .filter(text -> text.split(":")[0].equals("ISBN-13")).findAny().orElse("undefined");
+                    .filter(text -> text.split(":")[0].equals("ISBN-13")).findAny()
+                    .orElse(defaultResponse);
         }
         catch (IOException e) {
             e.printStackTrace();
         }
-        return "undefined";
+        return defaultResponse;
     }
 }
