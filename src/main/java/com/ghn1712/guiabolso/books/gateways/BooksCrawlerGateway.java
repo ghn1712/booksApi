@@ -16,7 +16,7 @@ import org.jsoup.select.Elements;
 
 import com.ghn1712.guiabolso.books.config.CrawlerConfig;
 import com.ghn1712.guiabolso.books.crawler.AmazonStrategy;
-import com.ghn1712.guiabolso.books.crawler.IsbnContext;
+import com.ghn1712.guiabolso.books.crawler.IsbnRetrieverContext;
 import com.ghn1712.guiabolso.books.crawler.IsbnStrategy;
 import com.ghn1712.guiabolso.books.crawler.ManningStrategy;
 import com.ghn1712.guiabolso.books.crawler.PacktpubStrategy;
@@ -105,6 +105,6 @@ public class BooksCrawlerGateway implements BooksListGateway {
     }
 
     private String getIsbn(String url) {
-        return IsbnContext.getIsbn(url, setStrategy(url));
+        return IsbnRetrieverContext.getIsbn(url, setStrategy(url));
     }
 }

@@ -1,9 +1,9 @@
 package com.ghn1712.guiabolso.books.crawler;
 
-public class IsbnContext {
+public class IsbnRetrieverContext {
 
 
-    private IsbnContext() {
+    private IsbnRetrieverContext() {
     }
     public static String getIsbn(String url, IsbnStrategy strategy) {
         return strategy.execute(url);
