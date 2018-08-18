@@ -16,8 +16,10 @@ import org.jsoup.select.Elements;
 
 import com.ghn1712.guiabolso.books.config.CrawlerConfig;
 import com.ghn1712.guiabolso.books.crawler.AmazonStrategy;
+import com.ghn1712.guiabolso.books.crawler.FundamentalKotlinStrategy;
 import com.ghn1712.guiabolso.books.crawler.IsbnRetrieverContext;
 import com.ghn1712.guiabolso.books.crawler.IsbnStrategy;
+import com.ghn1712.guiabolso.books.crawler.KuramkitapStrategy;
 import com.ghn1712.guiabolso.books.crawler.ManningStrategy;
 import com.ghn1712.guiabolso.books.crawler.PacktpubStrategy;
 import com.ghn1712.guiabolso.books.crawler.UndefinedStrategy;
@@ -79,6 +81,8 @@ public class BooksCrawlerGateway implements BooksListGateway {
         map.put("amazon", new AmazonStrategy());
         map.put("manning", new ManningStrategy());
         map.put("packtpub", new PacktpubStrategy());
+        map.put("fundamental-kotlin", new FundamentalKotlinStrategy());
+        map.put("kuramkitap", new KuramkitapStrategy());
         return map;
     }
 
