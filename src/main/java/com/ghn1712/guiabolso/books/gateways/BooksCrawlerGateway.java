@@ -22,7 +22,7 @@ import com.ghn1712.guiabolso.books.crawler.IsbnStrategy;
 import com.ghn1712.guiabolso.books.crawler.KuramkitapStrategy;
 import com.ghn1712.guiabolso.books.crawler.ManningStrategy;
 import com.ghn1712.guiabolso.books.crawler.PacktpubStrategy;
-import com.ghn1712.guiabolso.books.crawler.UndefinedStrategy;
+import com.ghn1712.guiabolso.books.crawler.UnavailableStrategy;
 import com.ghn1712.guiabolso.books.entities.Book;
 
 public class BooksCrawlerGateway implements BooksListGateway {
@@ -96,7 +96,7 @@ public class BooksCrawlerGateway implements BooksListGateway {
         catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        return new UndefinedStrategy();
+        return new UnavailableStrategy();
     }
 
     private String getKey(String stringUrl) throws MalformedURLException {
