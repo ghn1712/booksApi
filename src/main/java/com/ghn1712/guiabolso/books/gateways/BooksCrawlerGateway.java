@@ -18,6 +18,8 @@ import com.ghn1712.guiabolso.books.config.CrawlerConfig;
 import com.ghn1712.guiabolso.books.crawler.AmazonStrategy;
 import com.ghn1712.guiabolso.books.crawler.IsbnContext;
 import com.ghn1712.guiabolso.books.crawler.IsbnStrategy;
+import com.ghn1712.guiabolso.books.crawler.ManningStrategy;
+import com.ghn1712.guiabolso.books.crawler.PacktpubStrategy;
 import com.ghn1712.guiabolso.books.crawler.UndefinedStrategy;
 import com.ghn1712.guiabolso.books.entities.Book;
 
@@ -75,6 +77,8 @@ public class BooksCrawlerGateway implements BooksListGateway {
     private Map<String, IsbnStrategy> loadStrategyMap() {
         HashMap<String, IsbnStrategy> map = new HashMap<>();
         map.put("amazon", new AmazonStrategy());
+        map.put("manning", new ManningStrategy());
+        map.put("packtpub", new PacktpubStrategy());
         return map;
     }
 
