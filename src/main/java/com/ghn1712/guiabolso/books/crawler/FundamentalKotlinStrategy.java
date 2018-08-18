@@ -11,7 +11,7 @@ public class FundamentalKotlinStrategy implements IsbnRetrieverStrategy {
         final String defaultResponse = IsbnRetrieverStrategy.super.execute(url);
         try {
             return Jsoup.connect(url).get().select("div.scondary_content h2.dark-blue-text").eachText().parallelStream()
-                    .filter(text -> text.split(" ")[0].equals("ISBN:")).findAny()
+                    .filter(text -> text.split(":")[0].equals("ISBN")).map(text -> text.split(":")[1]).findAny()
                     .orElse(defaultResponse);
         }
         catch (IOException e) {
