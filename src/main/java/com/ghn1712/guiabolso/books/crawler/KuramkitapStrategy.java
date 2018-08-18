@@ -11,16 +11,16 @@ public class KuramkitapStrategy implements IsbnRetrieverStrategy {
 
     @Override
     public String execute(String url) {
+        final String defaultResponse = IsbnRetrieverStrategy.super.execute(url);
         try {
-
             return Jsoup.connect(url).get().select("div.table-cell").eachText().parallelStream()
                     .filter(text -> Pattern.compile(REGEX).matcher(text).matches()).findAny()
-                    .orElse(IsbnRetrieverStrategy.super.execute(url));
+                    .orElse(defaultResponse);
 
         }
         catch (IOException e) {
             e.printStackTrace();
         }
-        return IsbnRetrieverStrategy.super.execute(url);
+        return defaultResponse;
     }
 }
