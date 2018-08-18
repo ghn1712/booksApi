@@ -21,7 +21,7 @@ import com.ghn1712.guiabolso.books.entities.Book;
 public class BooksCrawlerGateway implements BooksListGateway {
 
     private CrawlerConfig crawlerConfig;
-    Map<String, IsbnStrategy> strategyMap;
+    private Map<String, IsbnStrategy> strategyMap;
 
     @Inject
     public BooksCrawlerGateway(CrawlerConfig crawlerConfig) {
@@ -46,7 +46,8 @@ public class BooksCrawlerGateway implements BooksListGateway {
                     .collect(Collectors.toList());
             booksDescription.forEach(System.out::println);
             System.out.println("------------------------------");
-            List<String> booksIsbn = booksHtml.select(".book-cover-image").parents().eachAttr("abs:href").stream()
+            List<String> booksIsbn = booksHtml.select(".book-cover-image").parents().eachAttr("abs:href")
+                    .parallelStream()
                     .map(this::getIsbn).collect(Collectors.toList());
             booksIsbn.forEach(System.out::println);
         }
@@ -67,7 +68,6 @@ public class BooksCrawlerGateway implements BooksListGateway {
     }
 
     private String getIsbn(String url) {
-        IsbnContext.setStrategy(setStrategy(url));
-        return IsbnContext.getIsbn(url);
+        return IsbnContext.getIsbn(url, setStrategy(url));
     }
 }
