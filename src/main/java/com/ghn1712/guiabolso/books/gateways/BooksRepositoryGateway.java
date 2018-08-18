@@ -32,7 +32,7 @@ public class BooksRepositoryGateway implements BooksGateway {
     @Override
     public Book getBook(String id) {
         try (Query query = connectionHandler.getConnection().open().createQuery(GET_QUERY)) {
-            return query.addParameter("id", id).executeAndFetchFirst(Book.class);
+            return query.addParameter("id", Integer.parseInt(id)).executeAndFetchFirst(Book.class);
         }
     }
 
