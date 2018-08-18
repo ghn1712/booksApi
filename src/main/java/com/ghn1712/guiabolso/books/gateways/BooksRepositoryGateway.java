@@ -38,7 +38,7 @@ public class BooksRepositoryGateway implements BooksGateway {
 
     @Override
     public String addBook(Book book) {
-        try (Query query = connectionHandler.getConnection().open().createQuery(INSERT_QUERY)) {
+        try (Query query = connectionHandler.getConnection().open().createQuery(INSERT_QUERY, true)) {
             return query.bind(book).executeUpdate().getKey(String.class);
         }
     }
