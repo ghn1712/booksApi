@@ -8,15 +8,20 @@ import com.ghn1712.guiabolso.books.config.DatabaseConfig;
 
 public class DatabaseConnectionHandlerPostgres implements DatabaseConnectionHandler {
 
-    DatabaseConfig config;
+    private final Sql2o connection;
 
     @Inject
     public DatabaseConnectionHandlerPostgres(DatabaseConfig config) {
-        this.config = config;
+        connection = createConnection(config);
     }
 
     @Override
     public Sql2o getConnection() {
+        return connection;
+    }
+
+    private Sql2o createConnection(DatabaseConfig config) {
         return new Sql2o(config.getUrl(), config.getUser(), config.getPassword());
+
     }
 }
