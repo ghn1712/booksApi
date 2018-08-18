@@ -11,7 +11,8 @@ public class ManningStrategy implements IsbnRetrieverStrategy {
         final String defaultResponse = IsbnRetrieverStrategy.super.execute(url);
         try {
             return Jsoup.connect(url).get().select("div.product-info ul li").eachText().parallelStream()
-                    .filter(text -> text.split(" ")[0].equals("ISBN")).findAny().orElse(defaultResponse);
+                    .filter(text -> text.split(" ")[0].equals("ISBN")).map(text -> text.split(" ")[1]).findAny()
+                    .orElse(defaultResponse);
         }
         catch (IOException e) {
             e.printStackTrace();
