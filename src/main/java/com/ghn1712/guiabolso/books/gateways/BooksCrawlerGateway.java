@@ -3,6 +3,7 @@ package com.ghn1712.guiabolso.books.gateways;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -39,17 +40,29 @@ public class BooksCrawlerGateway implements BooksListGateway {
     @Override
     public List<Book> listBooks() {
         try {
-            long start = System.currentTimeMillis();
             Elements booksHtml = Jsoup.connect(crawlerConfig.getUrl()).get().select("article");
             List<String> booksTitles = getBookTitles(booksHtml);
             List<String> booksLanguage = getBooksLanguage(booksHtml);
             List<String> booksDescription = getBooksDescription(booksHtml, booksTitles);
             List<String> booksIsbn = getBooksIsbn(booksHtml);
-            booksIsbn.forEach(System.out::println);
-            System.out.println(System.currentTimeMillis() - start);
+            return createBooksList(booksTitles, booksDescription, booksIsbn, booksLanguage);
         }
         catch (IOException e) {
             e.printStackTrace();
+        }
+        return Collections.emptyList();
+    }
+
+    private List<Book> createBooksList(List<String> booksTitles, List<String> booksDescription, List<String> booksIsbn,
+            List<String> booksLanguages) {
+        if (booksDescription.size() == booksTitles.size() && booksDescription.size() == booksIsbn.size()
+                && booksDescription.size() == booksLanguages.size()) {
+            List<Book> booksList = new ArrayList<>();
+            for (int i = 0; i < booksDescription.size(); i++) {
+                booksList.add(
+                        new Book(booksTitles.get(i), booksDescription.get(i), booksIsbn.get(i), booksLanguages.get(i)));
+            }
+            return booksList;
         }
         return Collections.emptyList();
     }

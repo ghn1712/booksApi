@@ -3,6 +3,16 @@ package com.ghn1712.guiabolso.books.entities;
 
 public class Book {
 
+    public Book() {
+    }
+
+    public Book(String title, String description, String isbn, String language) {
+        this.title = title;
+        this.description = description;
+        this.isbn = isbn;
+        this.language = language;
+    }
+
     private String title;
     private String description;
     private String id;
