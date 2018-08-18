@@ -4,11 +4,11 @@ import java.io.IOException;
 
 import org.jsoup.Jsoup;
 
-public class ManningStrategy implements IsbnStrategy {
+public class ManningStrategy implements IsbnRetrieverStrategy {
 
     @Override
     public String execute(String url) {
-        final String defaultResponse = IsbnStrategy.super.execute(url);
+        final String defaultResponse = IsbnRetrieverStrategy.super.execute(url);
         try {
             return Jsoup.connect(url).get().select("div.product-info ul li").eachText().parallelStream()
                     .filter(text -> text.split(" ")[0].equals("ISBN")).findAny().orElse(defaultResponse);

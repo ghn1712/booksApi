@@ -19,7 +19,7 @@ import com.ghn1712.guiabolso.books.config.CrawlerConfig;
 import com.ghn1712.guiabolso.books.crawler.AmazonStrategy;
 import com.ghn1712.guiabolso.books.crawler.FundamentalKotlinStrategy;
 import com.ghn1712.guiabolso.books.crawler.IsbnRetrieverContext;
-import com.ghn1712.guiabolso.books.crawler.IsbnStrategy;
+import com.ghn1712.guiabolso.books.crawler.IsbnRetrieverStrategy;
 import com.ghn1712.guiabolso.books.crawler.KuramkitapStrategy;
 import com.ghn1712.guiabolso.books.crawler.ManningStrategy;
 import com.ghn1712.guiabolso.books.crawler.PacktpubStrategy;
@@ -29,7 +29,7 @@ import com.ghn1712.guiabolso.books.entities.Book;
 public class BooksCrawlerGateway implements BooksListGateway {
 
     private CrawlerConfig crawlerConfig;
-    private Map<String, IsbnStrategy> strategyMap;
+    private Map<String, IsbnRetrieverStrategy> strategyMap;
 
     @Inject
     public BooksCrawlerGateway(CrawlerConfig crawlerConfig) {
@@ -89,8 +89,8 @@ public class BooksCrawlerGateway implements BooksListGateway {
                 .map(title -> title.split(",")[0].toLowerCase()).collect(Collectors.toList());
     }
 
-    private Map<String, IsbnStrategy> loadStrategyMap() {
-        HashMap<String, IsbnStrategy> map = new HashMap<>();
+    private Map<String, IsbnRetrieverStrategy> loadStrategyMap() {
+        HashMap<String, IsbnRetrieverStrategy> map = new HashMap<>();
         map.put("amazon", new AmazonStrategy());
         map.put("manning", new ManningStrategy());
         map.put("packtpub", new PacktpubStrategy());
@@ -99,7 +99,7 @@ public class BooksCrawlerGateway implements BooksListGateway {
         return map;
     }
 
-    private IsbnStrategy setStrategy(String stringUrl) {
+    private IsbnRetrieverStrategy setStrategy(String stringUrl) {
         try {
             String key = getKey(stringUrl);
             if (strategyMap.containsKey(key)) {

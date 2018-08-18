@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 import org.jsoup.Jsoup;
 
-public class KuramkitapStrategy implements IsbnStrategy {
+public class KuramkitapStrategy implements IsbnRetrieverStrategy {
 
     private static final String REGEX = "^[0-9]{13}$";
 
@@ -15,12 +15,12 @@ public class KuramkitapStrategy implements IsbnStrategy {
 
             return Jsoup.connect(url).get().select("div.table-cell").eachText().parallelStream()
                     .filter(text -> Pattern.compile(REGEX).matcher(text).matches()).findAny()
-                    .orElse(IsbnStrategy.super.execute(url));
+                    .orElse(IsbnRetrieverStrategy.super.execute(url));
 
         }
         catch (IOException e) {
             e.printStackTrace();
         }
-        return IsbnStrategy.super.execute(url);
+        return IsbnRetrieverStrategy.super.execute(url);
     }
 }
