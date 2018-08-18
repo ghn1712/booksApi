@@ -11,7 +11,8 @@ public class AmazonStrategy implements IsbnRetrieverStrategy {
         final String defaultResponse = IsbnRetrieverStrategy.super.execute(url);
         try {
             return Jsoup.connect(url).get().select("div.content li").eachText().parallelStream()
-                    .filter(text -> text.split(":")[0].equals("ISBN-13")).findAny()
+                    .filter(text -> text.split(":")[0].equals("ISBN-13"))
+                    .map(text -> text.split(":")[1].replaceAll("-", "")).findAny()
                     .orElse(defaultResponse);
         }
         catch (IOException e) {
