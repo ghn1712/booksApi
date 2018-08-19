@@ -14,7 +14,7 @@ public class BooksRepositoryGateway implements BooksGateway {
     private static final String LIST_QUERY = "select * from books";
     private static final String GET_QUERY = "select * from books where id = :id";
     private static final String INSERT_QUERY = "insert into books (title, description, isbn, language) values (:title, :description, :isbn, :language)";
-
+    private static final String TRUNCATE_QUERY = "truncate table books restart identity";
 
     @Inject
     public BooksRepositoryGateway(DatabaseConnectionHandler connectionHandler) {
@@ -41,5 +41,13 @@ public class BooksRepositoryGateway implements BooksGateway {
         try (Query query = connectionHandler.getConnection().open().createQuery(INSERT_QUERY, true)) {
             return query.bind(book).executeUpdate().getKey(String.class);
         }
+    }
+
+    @Override
+    public void truncate() {
+        try (Query query = connectionHandler.getConnection().open().createQuery(TRUNCATE_QUERY)) {
+            query.executeUpdate();
+        }
+
     }
 }

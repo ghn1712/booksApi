@@ -7,4 +7,6 @@ public interface BooksGateway extends BooksListGateway {
     Book getBook(String id);
 
     String addBook(Book book);
+
+    void truncate();
 }
