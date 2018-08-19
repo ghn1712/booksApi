@@ -60,6 +60,13 @@ public class ApplicationIntegratedTests {
     }
 
     @Test
+    public void should_return_400_when_add_book_with_invalid_json() throws UnirestException {
+        HttpResponse<String> request = Unirest.post("http://localhost:4567/books").body("\"description\"lalala")
+                .asString();
+        assertEquals(HttpStatus.BAD_REQUEST_400, request.getStatus());
+    }
+
+    @Test
     public void should_return_201_and_location_header_when_book_added() throws UnirestException {
         Injector injector = Guice.createInjector(new BooksModule());
         BooksGateway gateway = injector.getInstance(BooksGateway.class);
