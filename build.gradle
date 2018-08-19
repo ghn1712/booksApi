@@ -25,3 +25,51 @@ dependencies {
 	compile group: 'com.mashape.unirest', name: 'unirest-java', version: '1.4.9'
 	
 }
+
+jar {
+    manifest {
+        attributes "Main-Class": "com.ghn1712.guiabolso.books.server.Application"
+    }
+ 
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+sourceSets{
+	test {
+		java.srcDir 'src/tests/java'
+	}
+}
+
+clean.doFirst{
+	delete "run"
+}
+
+test{
+	filter{
+		includeTestsMatching "*Tests"
+	}
+}
+
+task integrationTests(type: Test){
+	filter{
+		includeTestsMatching "*IntegratedTestsCase"
+	}
+}
+
+task copyJarToRun(type: Copy) {
+    from jar
+    into 'run'
+}   
+
+task copyConfig(type: Copy) {
+	from 'config'
+	into 'run/config'
+}
+
+task readyToRun{
+	
+}
+
+readyToRun.dependsOn copyJarToRun
+readyToRun.dependsOn copyConfig
