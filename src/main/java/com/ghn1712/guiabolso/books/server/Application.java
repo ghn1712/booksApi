@@ -6,6 +6,7 @@ import static spark.Spark.get;
 import static spark.Spark.halt;
 import static spark.Spark.post;
 
+import java.util.List;
 import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
@@ -15,6 +16,7 @@ import org.eclipse.jetty.http.HttpStatus;
 
 import com.ghn1712.guiabolso.books.controllers.BooksController;
 import com.ghn1712.guiabolso.books.entities.Book;
+import com.ghn1712.guiabolso.books.entities.BooksListResponse;
 import com.ghn1712.guiabolso.books.injection.modules.BooksModule;
 import com.ghn1712.guiabolso.books.serializer.Serializer;
 import com.google.gson.JsonParseException;
@@ -29,6 +31,10 @@ public class Application {
     private static final String BAD_REQUEST_MESSAGE = "{\"message\": \"Book json sent is invalid, check fields an schema\"}";
 
     public static void main(String[] args) {
+        start();
+    }
+
+    public static void start() {
         Injector injector = Guice.createInjector(new BooksModule());
         BooksController controller = injector.getInstance(BooksController.class);
         before(BOOKS_PATH, (req, res) -> {
@@ -38,7 +44,7 @@ public class Application {
                         BAD_REQUEST_MESSAGE);
             }
         });
-        get(BOOKS_PATH, (req, res) -> Serializer.serialize(controller.listBooks()));
+        get(BOOKS_PATH, (req, res) -> Serializer.serialize(createBooksListResponse(controller.listBooks())));
         get("/books/:id",
                 (req, res) -> controller.getBookById(req.params("id")).map(Serializer::serialize).orElseGet(() -> {
                     res.status(HttpStatus.NOT_FOUND_404);
@@ -52,6 +58,10 @@ public class Application {
 
         });
         after((req, res) -> res.type(ContentType.APPLICATION_JSON.toString()));
+    }
+
+    private static BooksListResponse createBooksListResponse(List<Book> booksList) {
+        return new BooksListResponse(booksList.size(), booksList);
     }
 
     private static boolean checkBookIsInvalid(String stringBook) {
