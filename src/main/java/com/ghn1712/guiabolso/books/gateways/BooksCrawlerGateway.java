@@ -1,6 +1,7 @@
 package com.ghn1712.guiabolso.books.gateways;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -48,9 +49,8 @@ public class BooksCrawlerGateway implements BooksListGateway {
             return createBooksList(booksTitles, booksDescription, booksIsbn, booksLanguage);
         }
         catch (IOException e) {
-            e.printStackTrace();
+            throw new UncheckedIOException(e);
         }
-        return Collections.emptyList();
     }
 
     private List<Book> createBooksList(List<String> booksTitles, List<String> booksDescription, List<String> booksIsbn,
