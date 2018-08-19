@@ -39,7 +39,7 @@ public class ControllerModule extends AbstractModule {
     @Provides
     public CrawlerConfig provideCrawlerConfig(ConfigProvider configProvider) {
         CrawlerConfig crawlerConfig = new CrawlerConfig();
-        crawlerConfig.setUrl("http://localhost:5000");
+        crawlerConfig.setUrl("http://google.com");
         return crawlerConfig;
     }
 }
