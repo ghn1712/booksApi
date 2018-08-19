@@ -13,7 +13,7 @@ import com.ghn1712.guiabolso.books.injection.modules.BooksModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-public class CrawlerIntegratedTests {
+public class CrawlerIntegratedTestsCase {
 
     BooksListGateway crawler;
 

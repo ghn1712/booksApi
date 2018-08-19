@@ -9,23 +9,23 @@ import java.util.regex.Pattern;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class ManningStrategyIntegratedTests {
+public class FundamentalKotlinStrategyIntegratedTestsCase {
 
-    static ManningStrategy strategy;
+    static FundamentalKotlinStrategy strategy;
     static Pattern pattern;
     static String regex = "^[0-9]{13}$";
 
     @BeforeClass
     public static void set_up() {
-        strategy = new ManningStrategy();
+        strategy = new FundamentalKotlinStrategy();
         pattern = Pattern.compile(regex);
     }
 
     @Test
-    public void should_return_book_isbn_when_connecting_to_manning_website() {
-        String isbn = strategy.execute("https://www.manning.com/books/android-in-action-third-edition");
+    public void should_return_book_isbn_when_connecting_to_fundamental_kotlin_website() {
+        String isbn = strategy.execute("http://www.fundamental-kotlin.com/");
         assertTrue(pattern.matcher(isbn).matches());
-        assertEquals("9781617290503", isbn);
+        assertEquals("9788692030710", isbn);
     }
 
     @Test

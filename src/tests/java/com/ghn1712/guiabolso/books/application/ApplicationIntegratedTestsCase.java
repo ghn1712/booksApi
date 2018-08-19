@@ -18,7 +18,7 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
-public class ApplicationIntegratedTests {
+public class ApplicationIntegratedTestsCase {
 
     @BeforeClass
     public static void set_up() {

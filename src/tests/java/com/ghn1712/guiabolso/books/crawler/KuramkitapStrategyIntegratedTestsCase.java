@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class KuramkitapStrategyIntegratedTests {
+public class KuramkitapStrategyIntegratedTestsCase {
 
     static KuramkitapStrategy strategy;
     static Pattern pattern;

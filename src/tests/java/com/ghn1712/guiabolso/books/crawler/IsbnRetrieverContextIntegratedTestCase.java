@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class IsbnRetrieverContextIntegratedTest {
+public class IsbnRetrieverContextIntegratedTestCase {
 
     static AmazonStrategy strategy;
     static Pattern pattern;

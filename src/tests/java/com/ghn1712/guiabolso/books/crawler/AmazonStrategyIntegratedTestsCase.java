@@ -9,23 +9,24 @@ import java.util.regex.Pattern;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class FundamentalKotlinStrategyIntegratedTests {
+public class AmazonStrategyIntegratedTestsCase {
 
-    static FundamentalKotlinStrategy strategy;
+    static AmazonStrategy strategy;
     static Pattern pattern;
     static String regex = "^[0-9]{13}$";
 
     @BeforeClass
     public static void set_up() {
-        strategy = new FundamentalKotlinStrategy();
+        strategy = new AmazonStrategy();
         pattern = Pattern.compile(regex);
     }
 
     @Test
-    public void should_return_book_isbn_when_connecting_to_fundamental_kotlin_website() {
-        String isbn = strategy.execute("http://www.fundamental-kotlin.com/");
+    public void should_return_book_isbn_when_connecting_to_amazon_website() {
+        String isbn = strategy.execute(
+                "https://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882/ref=sr_1_1_sspa?ie=UTF8&qid=1534625054&sr=8-1-spons&keywords=clean+code&psc=1");
         assertTrue(pattern.matcher(isbn).matches());
-        assertEquals("9788692030710", isbn);
+        assertEquals("9780132350884", isbn);
     }
 
     @Test

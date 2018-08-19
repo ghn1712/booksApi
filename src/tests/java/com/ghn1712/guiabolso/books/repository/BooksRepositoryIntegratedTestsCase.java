@@ -16,7 +16,7 @@ import com.ghn1712.guiabolso.books.injection.modules.BooksModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-public class BooksRepositoryIntegratedTests {
+public class BooksRepositoryIntegratedTestsCase {
 
     BooksGateway repository;
 
