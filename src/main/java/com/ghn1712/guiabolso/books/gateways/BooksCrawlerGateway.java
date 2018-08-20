@@ -15,6 +15,7 @@ import javax.inject.Inject;
 
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
+import org.pmw.tinylog.Logger;
 
 import com.ghn1712.guiabolso.books.config.CrawlerConfig;
 import com.ghn1712.guiabolso.books.crawler.AmazonStrategy;
@@ -107,7 +108,7 @@ public class BooksCrawlerGateway implements BooksListGateway {
             }
         }
         catch (MalformedURLException e) {
-            e.printStackTrace();
+            Logger.warn(e.getMessage());
         }
         return new UnavailableStrategy();
     }
