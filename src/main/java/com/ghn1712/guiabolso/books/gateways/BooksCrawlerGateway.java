@@ -2,40 +2,27 @@ package com.ghn1712.guiabolso.books.gateways;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
-import org.pmw.tinylog.Logger;
 
 import com.ghn1712.guiabolso.books.config.CrawlerConfig;
-import com.ghn1712.guiabolso.books.crawler.AmazonStrategy;
-import com.ghn1712.guiabolso.books.crawler.FundamentalKotlinStrategy;
 import com.ghn1712.guiabolso.books.crawler.IsbnRetrieverContext;
-import com.ghn1712.guiabolso.books.crawler.IsbnRetrieverStrategy;
-import com.ghn1712.guiabolso.books.crawler.KuramkitapStrategy;
-import com.ghn1712.guiabolso.books.crawler.ManningStrategy;
-import com.ghn1712.guiabolso.books.crawler.PacktpubStrategy;
-import com.ghn1712.guiabolso.books.crawler.UnavailableStrategy;
+import com.ghn1712.guiabolso.books.crawler.IsbnStrategyProvider;
 import com.ghn1712.guiabolso.books.entities.Book;
 
 public class BooksCrawlerGateway implements BooksListGateway {
 
     private CrawlerConfig crawlerConfig;
-    private Map<String, IsbnRetrieverStrategy> strategyMap;
 
     @Inject
     public BooksCrawlerGateway(CrawlerConfig crawlerConfig) {
         this.crawlerConfig = crawlerConfig;
-        strategyMap = loadStrategyMap();
     }
 
     @Override
@@ -67,9 +54,8 @@ public class BooksCrawlerGateway implements BooksListGateway {
     }
 
     private List<String> getBooksIsbn(Elements booksHtml) {
-        return booksHtml.select(".book-cover-image").parents().eachAttr("abs:href")
-                .parallelStream()
-                .map(this::getIsbn).collect(Collectors.toList());
+        return booksHtml.select(".book-cover-image").parents().eachAttr("abs:href").parallelStream().map(this::getIsbn)
+                .collect(Collectors.toList());
     }
 
     private List<String> getBooksDescription(Elements booksHtml, List<String> booksTitles) {
@@ -84,43 +70,11 @@ public class BooksCrawlerGateway implements BooksListGateway {
     }
 
     private List<String> getBookTitles(Elements booksHtml) {
-        return booksHtml.select("h2").eachText().stream()
-                .map(title -> title.split(",")[0].toLowerCase()).collect(Collectors.toList());
-    }
-
-    private Map<String, IsbnRetrieverStrategy> loadStrategyMap() {
-        HashMap<String, IsbnRetrieverStrategy> map = new HashMap<>();
-        map.put("amazon", new AmazonStrategy());
-        map.put("manning", new ManningStrategy());
-        map.put("packtpub", new PacktpubStrategy());
-        map.put("fundamental-kotlin", new FundamentalKotlinStrategy());
-        map.put("kuramkitap", new KuramkitapStrategy());
-        return map;
-    }
-
-    private IsbnRetrieverStrategy setStrategy(String stringUrl) {
-        try {
-            String key = getKey(stringUrl);
-            if (strategyMap.containsKey(key)) {
-                return strategyMap.get(key);
-            }
-        }
-        catch (MalformedURLException e) {
-            Logger.warn(e.getMessage());
-        }
-        return new UnavailableStrategy();
-    }
-
-    private String getKey(String stringUrl) throws MalformedURLException {
-        String[] hostUrl = new URL(stringUrl).getHost().split("\\.");
-        String key = hostUrl[0];
-        if (key.equals("www")) {
-            key = hostUrl[1];
-        }
-        return key;
+        return booksHtml.select("h2").eachText().stream().map(title -> title.split(",")[0].toLowerCase())
+                .collect(Collectors.toList());
     }
 
     private String getIsbn(String url) {
-        return IsbnRetrieverContext.getIsbn(url, setStrategy(url));
+        return IsbnRetrieverContext.getIsbn(url, IsbnStrategyProvider.getStrategy(url));
     }
 }
