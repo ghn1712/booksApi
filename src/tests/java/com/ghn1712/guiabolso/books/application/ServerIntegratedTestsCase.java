@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.eclipse.jetty.http.HttpStatus;
+import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -22,28 +24,30 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 public class ServerIntegratedTestsCase {
 
     static Server server;
+    BooksGateway gateway;
+    static Injector injector;
 
     @BeforeClass
-    public static void set_up() {
-        Injector injector = Guice.createInjector(new BooksModule());
+    public static void start_server() {
+        injector = Guice.createInjector(new BooksModule());
         server = injector.getInstance(Server.class);
         server.start(4567);
     }
 
+    @Before
+    public void set_up() {
+        gateway = injector.getInstance(BooksGateway.class);
+        gateway.truncate();
+    }
+
     @Test
     public void should_return_404_when_get_books_that_doesnt_exists() throws UnirestException {
-        Injector injector = Guice.createInjector(new BooksModule());
-        BooksGateway gateway = injector.getInstance(BooksGateway.class);
-        gateway.truncate();
         HttpResponse<String> request = Unirest.get("http://localhost:4567/books/1").asString();
         assertEquals(HttpStatus.NOT_FOUND_404, request.getStatus());
     }
 
     @Test
     public void should_return_200_and_book_when_get_books_that_exists() throws UnirestException {
-        Injector injector = Guice.createInjector(new BooksModule());
-        BooksGateway gateway = injector.getInstance(BooksGateway.class);
-        gateway.truncate();
         Book book = new Book("title", "description", "1", "isbn", "lg");
         gateway.addBook(book);
         HttpResponse<String> request = Unirest.get("http://localhost:4567/books/1").asString();
@@ -73,9 +77,6 @@ public class ServerIntegratedTestsCase {
 
     @Test
     public void should_return_201_and_location_header_when_book_added() throws UnirestException {
-        Injector injector = Guice.createInjector(new BooksModule());
-        BooksGateway gateway = injector.getInstance(BooksGateway.class);
-        gateway.truncate();
         HttpResponse<String> request = Unirest.post("http://localhost:4567/books")
                 .body(Serializer.serialize(new Book("title", "description", "isbn", "lg"))).asString();
         assertEquals(HttpStatus.CREATED_201, request.getStatus());
@@ -86,9 +87,6 @@ public class ServerIntegratedTestsCase {
 
     @Test
     public void should_return_200_when_list_books() throws UnirestException {
-        Injector injector = Guice.createInjector(new BooksModule());
-        BooksGateway gateway = injector.getInstance(BooksGateway.class);
-        gateway.truncate();
         HttpResponse<String> request = Unirest.get("http://localhost:4567/books").asString();
         assertEquals(HttpStatus.OK_200, request.getStatus());
         BooksListResponse booksListResponse = Serializer.deserialize(request.getBody(), BooksListResponse.class);
@@ -99,15 +97,17 @@ public class ServerIntegratedTestsCase {
 
     @Test
     public void should_return_200_and_empty_list() throws UnirestException {
-        Injector injector = Guice.createInjector(new ServerModule());
-        server = injector.getInstance(Server.class);
-        server.start(4568);
-        BooksGateway gateway = injector.getInstance(BooksGateway.class);
-        gateway.truncate();
+        Injector serverInjector = Guice.createInjector(new ServerModule());
+        serverInjector.getInstance(Server.class).start(4568);
         HttpResponse<String> request = Unirest.get("http://localhost:4568/books").asString();
         assertEquals(HttpStatus.OK_200, request.getStatus());
         BooksListResponse booksListResponse = Serializer.deserialize(request.getBody(), BooksListResponse.class);
         assertEquals(0, booksListResponse.getNumberBooks());
         assertTrue(booksListResponse.getBooks().isEmpty());
+    }
+
+    @AfterClass
+    public static void tear_down() {
+        injector.getInstance(BooksGateway.class).truncate();
     }
 }
