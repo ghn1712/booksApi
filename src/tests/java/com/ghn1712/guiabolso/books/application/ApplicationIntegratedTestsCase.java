@@ -11,7 +11,7 @@ import com.ghn1712.guiabolso.books.entities.BooksListResponse;
 import com.ghn1712.guiabolso.books.gateways.BooksGateway;
 import com.ghn1712.guiabolso.books.injection.modules.BooksModule;
 import com.ghn1712.guiabolso.books.serializer.Serializer;
-import com.ghn1712.guiabolso.books.server.Application;
+import com.ghn1712.guiabolso.books.server.ServerImpl;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mashape.unirest.http.HttpResponse;
@@ -22,7 +22,7 @@ public class ApplicationIntegratedTestsCase {
 
     @BeforeClass
     public static void set_up() {
-        Application.start();
+        ServerImpl.start();
     }
 
     @Test

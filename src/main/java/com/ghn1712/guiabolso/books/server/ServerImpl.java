@@ -25,7 +25,7 @@ import com.google.inject.Injector;
 
 import spark.route.HttpMethod;
 
-public class Application {
+public class ServerImpl {
 
     private static final String BOOKS_PATH = "/books";
     private static final String BAD_REQUEST_MESSAGE = "{\"message\": \"Book json sent is invalid, check fields an schema\"}";
