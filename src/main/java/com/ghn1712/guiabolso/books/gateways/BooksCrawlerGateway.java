@@ -5,7 +5,6 @@ import java.io.UncheckedIOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,16 +55,15 @@ public class BooksCrawlerGateway implements BooksListGateway {
 
     private List<Book> createBooksList(List<String> booksTitles, List<String> booksDescription, List<String> booksIsbn,
             List<String> booksLanguages) {
+        List<Book> booksList = new ArrayList<>();
         if (booksDescription.size() == booksTitles.size() && booksDescription.size() == booksIsbn.size()
                 && booksDescription.size() == booksLanguages.size()) {
-            List<Book> booksList = new ArrayList<>();
             for (int i = 0; i < booksDescription.size(); i++) {
                 booksList.add(
                         new Book(booksTitles.get(i), booksDescription.get(i), booksIsbn.get(i), booksLanguages.get(i)));
             }
-            return booksList;
         }
-        return Collections.emptyList();
+        return booksList;
     }
 
     private List<String> getBooksIsbn(Elements booksHtml) {

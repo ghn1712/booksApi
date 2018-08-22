@@ -23,9 +23,6 @@ public class BooksUsecaseImpl implements BooksUsecase {
     @Override
     public List<Book> listBooks() {
         List<Book> books = booksGateway.listBooks();
-        if (books.isEmpty()) {
-            return booksListGateway.listBooks();
-        }
         books.addAll(booksListGateway.listBooks());
         return books;
     }
