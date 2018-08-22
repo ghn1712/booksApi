@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import org.junit.AfterClass;
 import org.junit.Test;
 
 import com.ghn1712.guiabolso.books.controllers.BooksController;
@@ -20,7 +21,6 @@ public class ControllerIntegratedTestsCase {
 
     BooksController controller;
     BooksUsecase usecase;
-
 
     @Test
     public void should_return_empty_list_when_usecase_return_empty_list() {
@@ -70,5 +70,10 @@ public class ControllerIntegratedTestsCase {
         gateway.addBook(book);
         controller = injector.getInstance(BooksController.class);
         assertEquals(book, controller.getBookById("1").get());
+    }
+
+    @AfterClass
+    public static void tear_down() {
+        Guice.createInjector(new BooksModule()).getInstance(BooksGateway.class).truncate();
     }
 }

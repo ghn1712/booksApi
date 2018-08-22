@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import org.junit.AfterClass;
 import org.junit.Test;
 import org.sql2o.Sql2o;
 
@@ -88,5 +89,10 @@ public class BooksRepositoryIntegratedTestsCase {
         repository.addBook(book);
         List<Book> books = repository.listBooks();
         assertEquals(2, books.size());
+    }
+
+    @AfterClass
+    public static void tear_down() {
+        Guice.createInjector(new BooksModule()).getInstance(BooksGateway.class).truncate();
     }
 }

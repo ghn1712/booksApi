@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import org.junit.AfterClass;
 import org.junit.Test;
 
 import com.ghn1712.guiabolso.books.entities.Book;
@@ -19,7 +20,6 @@ public class UsecaseIntegratedTestsCase {
 
     BooksUsecase usecase;
 
-
     @Test
     public void should_return_empty_list_when_both_gateways_return_empty_list() {
         Injector injector = Guice.createInjector(new UsecaseModule());
@@ -28,7 +28,6 @@ public class UsecaseIntegratedTestsCase {
         gateway.truncate();
         List<Book> listBooks = usecase.listBooks();
         assertEquals(0, listBooks.size());
-
     }
 
     @Test
@@ -42,7 +41,6 @@ public class UsecaseIntegratedTestsCase {
         List<Book> listBooks = usecase.listBooks();
         assertEquals(1, listBooks.size());
         assertTrue(listBooks.contains(book));
-
     }
 
     @Test
@@ -100,5 +98,10 @@ public class UsecaseIntegratedTestsCase {
         Book book = new Book("title", "description", "1", "isbn", "lg");
         usecase.addBook(book);
         assertEquals(book, usecase.getBook("1").get());
+    }
+
+    @AfterClass
+    public static void tear_down() {
+        Guice.createInjector(new BooksModule()).getInstance(BooksGateway.class).truncate();
     }
 }
