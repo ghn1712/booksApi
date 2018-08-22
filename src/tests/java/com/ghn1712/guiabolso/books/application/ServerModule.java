@@ -1,4 +1,4 @@
-package com.ghn1712.guiabolso.books.injection.modules;
+package com.ghn1712.guiabolso.books.application;
 
 import javax.inject.Singleton;
 
@@ -21,7 +21,7 @@ import com.ghn1712.guiabolso.books.usecases.BooksUsecaseImpl;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 
-public class BooksModule extends AbstractModule {
+public class ServerModule extends AbstractModule {
 
     @Override
     protected void configure() {
@@ -41,6 +41,8 @@ public class BooksModule extends AbstractModule {
 
     @Provides
     public CrawlerConfig provideCrawlerConfig(ConfigProvider configProvider) {
-        return configProvider.getConfig().getCrawlerConfig();
+        CrawlerConfig crawlerConfig = new CrawlerConfig();
+        crawlerConfig.setUrl("http://google.com");
+        return crawlerConfig;
     }
 }

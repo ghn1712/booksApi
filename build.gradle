@@ -29,7 +29,7 @@ dependencies {
 
 jar {
     manifest {
-        attributes "Main-Class": "com.ghn1712.guiabolso.books.server.Application"
+        attributes "Main-Class": "com.ghn1712.guiabolso.books.application.Application"
     }
  
     from {

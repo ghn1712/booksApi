@@ -1,6 +1,7 @@
 package com.ghn1712.guiabolso.books.application;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.BeforeClass;
@@ -11,18 +12,22 @@ import com.ghn1712.guiabolso.books.entities.BooksListResponse;
 import com.ghn1712.guiabolso.books.gateways.BooksGateway;
 import com.ghn1712.guiabolso.books.injection.modules.BooksModule;
 import com.ghn1712.guiabolso.books.serializer.Serializer;
-import com.ghn1712.guiabolso.books.server.ServerImpl;
+import com.ghn1712.guiabolso.books.server.Server;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
-public class ApplicationIntegratedTestsCase {
+public class ServerIntegratedTestsCase {
+
+    static Server server;
 
     @BeforeClass
     public static void set_up() {
-        ServerImpl.start();
+        Injector injector = Guice.createInjector(new BooksModule());
+        server = injector.getInstance(Server.class);
+        server.start(4567);
     }
 
     @Test
@@ -92,14 +97,17 @@ public class ApplicationIntegratedTestsCase {
         // assertTrue(booksListReponse.getBooks().containsAll(expected);
     }
 
-    // @Test
-    // public void should_return_200_and_empty_list() throws UnirestException {
-    // HttpResponse<String> request =
-    // Unirest.get("http://localhost:4567/books").asString();
-    // assertEquals(HttpStatus.OK_200, request.getStatus());
-    // BooksListResponse booksListResponse =
-    // Serializer.deserialize(request.getBody(), BooksListResponse.class);
-    // assertEquals(0, booksListResponse.getNumberBooks());
-    // assertTrue(booksListResponse.getBooks().isEmpty());
-    // }
+    @Test
+    public void should_return_200_and_empty_list() throws UnirestException {
+        Injector injector = Guice.createInjector(new ServerModule());
+        server = injector.getInstance(Server.class);
+        server.start(4568);
+        BooksGateway gateway = injector.getInstance(BooksGateway.class);
+        gateway.truncate();
+        HttpResponse<String> request = Unirest.get("http://localhost:4568/books").asString();
+        assertEquals(HttpStatus.OK_200, request.getStatus());
+        BooksListResponse booksListResponse = Serializer.deserialize(request.getBody(), BooksListResponse.class);
+        assertEquals(0, booksListResponse.getNumberBooks());
+        assertTrue(booksListResponse.getBooks().isEmpty());
+    }
 }
