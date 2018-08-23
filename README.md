@@ -14,4 +14,6 @@
 
 - Para executar a aplicação, entre no diretório run, e execute o comando ```java -jar booksApi.jar```
 
+- Existem opções de execução para deixar a consulta no crawler mais rápida, cacheando os resultados em memória após consultados. Para isso basta setar no arquivo config.json as opções cache ou startupCache como true. A diferença é que a opção cache fará o cache somente após a primeira execução, enquanto a segunda o fará ao subir a aplicação. Caso as duas sejam true, prevalecerá a opção na subida.
+
 **Caso queira executar o jar sem entrar na pasta run, lembre-se de no diretório corrente possuir o arquivo config/config.json**
