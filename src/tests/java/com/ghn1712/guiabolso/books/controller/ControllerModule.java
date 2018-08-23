@@ -40,6 +40,8 @@ public class ControllerModule extends AbstractModule {
     public CrawlerConfig provideCrawlerConfig(ConfigProvider configProvider) {
         CrawlerConfig crawlerConfig = new CrawlerConfig();
         crawlerConfig.setUrl("http://google.com");
+        crawlerConfig.setCache(false);
+        crawlerConfig.setStartupCache(false);
         return crawlerConfig;
     }
 }

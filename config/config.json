@@ -5,6 +5,8 @@
         "password": "lalala"
     },
     "crawlerConfig": {
-        "url": "https://kotlinlang.org/docs/books.html"
+        "url": "https://kotlinlang.org/docs/books.html",
+        "cache": false,
+        "startupCache": false
     }
 }

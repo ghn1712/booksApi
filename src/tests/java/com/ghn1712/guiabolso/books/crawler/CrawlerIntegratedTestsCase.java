@@ -1,9 +1,11 @@
 package com.ghn1712.guiabolso.books.crawler;
 
+import static org.awaitility.Awaitility.with;
 import static org.junit.Assert.assertEquals;
 
 import java.io.UncheckedIOException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 
@@ -38,5 +40,26 @@ public class CrawlerIntegratedTestsCase {
         Injector injector = Guice.createInjector(new CrawlerExceptionModule());
         crawler = injector.getInstance(BooksListGateway.class);
         crawler.listBooks();
+    }
+
+    @Test
+    public void should_return_fast_when_cache_is_on() {
+        Injector injector = Guice.createInjector(new CrawlerCacheModule());
+        crawler = injector.getInstance(BooksListGateway.class);
+        crawler.listBooks();
+        with().pollDelay(5, TimeUnit.MILLISECONDS).await().atMost(50, TimeUnit.MILLISECONDS).untilAsserted(() -> {
+            List<Book> secondResponse = crawler.listBooks();
+            assertEquals(24, secondResponse.size());
+        });
+    }
+
+    @Test
+    public void should_return_fast_when_cache_on_startup_is_on() {
+        Injector injector = Guice.createInjector(new CrawlerCacheStartupModule());
+        crawler = injector.getInstance(BooksListGateway.class);
+        with().pollDelay(5, TimeUnit.MILLISECONDS).await().atMost(50, TimeUnit.MILLISECONDS).untilAsserted(() -> {
+            List<Book> secondResponse = crawler.listBooks();
+            assertEquals(24, secondResponse.size());
+        });
     }
 }

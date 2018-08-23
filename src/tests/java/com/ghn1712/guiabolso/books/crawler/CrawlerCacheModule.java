@@ -6,7 +6,7 @@ import com.ghn1712.guiabolso.books.gateways.BooksListGateway;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 
-public class CrawlerModule extends AbstractModule {
+public class CrawlerCacheModule extends AbstractModule {
 
     @Override
     protected void configure() {
@@ -16,8 +16,8 @@ public class CrawlerModule extends AbstractModule {
     @Provides
     public CrawlerConfig provideCrawlerConfig() {
         CrawlerConfig crawlerConfig = new CrawlerConfig();
-        crawlerConfig.setUrl("http://google.com");
-        crawlerConfig.setCache(false);
+        crawlerConfig.setUrl("https://kotlinlang.org/docs/books.html");
+        crawlerConfig.setCache(true);
         crawlerConfig.setStartupCache(false);
         return crawlerConfig;
     }

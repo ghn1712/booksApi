@@ -19,21 +19,30 @@ import com.ghn1712.guiabolso.books.entities.Book;
 public class BooksCrawlerGateway implements BooksListGateway {
 
     private CrawlerConfig crawlerConfig;
+    private List<Book> booksList;
 
     @Inject
     public BooksCrawlerGateway(CrawlerConfig crawlerConfig) {
         this.crawlerConfig = crawlerConfig;
+        booksList = new ArrayList<>();
+        if (crawlerConfig.isStartupCacheOn()) {
+            listBooks();
+        }
     }
 
     @Override
     public List<Book> listBooks() {
+        if ((crawlerConfig.isCacheOn() || crawlerConfig.isStartupCacheOn()) && !booksList.isEmpty()) {
+            return booksList;
+        }
         try {
             Elements booksHtml = Jsoup.connect(crawlerConfig.getUrl()).get().select("article");
             List<String> booksTitles = getBookTitles(booksHtml);
             List<String> booksLanguage = getBooksLanguage(booksHtml);
             List<String> booksDescription = getBooksDescription(booksHtml, booksTitles);
             List<String> booksIsbn = getBooksIsbn(booksHtml);
-            return createBooksList(booksTitles, booksDescription, booksIsbn, booksLanguage);
+            booksList = createBooksList(booksTitles, booksDescription, booksIsbn, booksLanguage);
+            return booksList;
         }
         catch (IOException e) {
             throw new UncheckedIOException(e);
@@ -42,15 +51,15 @@ public class BooksCrawlerGateway implements BooksListGateway {
 
     private List<Book> createBooksList(List<String> booksTitles, List<String> booksDescription, List<String> booksIsbn,
             List<String> booksLanguages) {
-        List<Book> booksList = new ArrayList<>();
+        List<Book> books = new ArrayList<>();
         if (booksDescription.size() == booksTitles.size() && booksDescription.size() == booksIsbn.size()
                 && booksDescription.size() == booksLanguages.size()) {
             for (int i = 0; i < booksDescription.size(); i++) {
-                booksList.add(
+                books.add(
                         new Book(booksTitles.get(i), booksDescription.get(i), booksIsbn.get(i), booksLanguages.get(i)));
             }
         }
-        return booksList;
+        return books;
     }
 
     private List<String> getBooksIsbn(Elements booksHtml) {

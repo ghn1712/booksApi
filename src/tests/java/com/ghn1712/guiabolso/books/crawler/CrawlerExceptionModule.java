@@ -17,6 +17,7 @@ public class CrawlerExceptionModule extends AbstractModule {
     public CrawlerConfig provideCrawlerConfig() {
         CrawlerConfig crawlerConfig = new CrawlerConfig();
         crawlerConfig.setUrl("http://localhost:4568");
+        crawlerConfig.setCache(false);
         return crawlerConfig;
     }
 }
