@@ -7,6 +7,10 @@ import java.util.Map;
 
 import org.pmw.tinylog.Logger;
 
+import com.ghn1712.guiabolso.books.injection.modules.InjectorProvider;
+import com.google.inject.Key;
+import com.google.inject.name.Names;
+
 public class IsbnStrategyProvider {
 
     private IsbnStrategyProvider() {
@@ -16,11 +20,16 @@ public class IsbnStrategyProvider {
 
     private static Map<String, IsbnRetrieverStrategy> loadStrategyMap() {
         HashMap<String, IsbnRetrieverStrategy> map = new HashMap<>();
-        map.put("amazon", new AmazonStrategy());
-        map.put("manning", new ManningStrategy());
-        map.put("packtpub", new PacktpubStrategy());
-        map.put("fundamental-kotlin", new FundamentalKotlinStrategy());
-        map.put("kuramkitap", new KuramkitapStrategy());
+        map.put("amazon", InjectorProvider.getInjector()
+                .getInstance(Key.get(IsbnRetrieverStrategy.class, Names.named("amazon"))));
+        map.put("manning", InjectorProvider.getInjector()
+                .getInstance(Key.get(IsbnRetrieverStrategy.class, Names.named("manning"))));
+        map.put("packtpub", InjectorProvider.getInjector()
+                .getInstance(Key.get(IsbnRetrieverStrategy.class, Names.named("packtpub"))));
+        map.put("fundamental-kotlin", InjectorProvider.getInjector()
+                .getInstance(Key.get(IsbnRetrieverStrategy.class, Names.named("fundamental-kotlin"))));
+        map.put("kuramkitap", InjectorProvider.getInjector()
+                .getInstance(Key.get(IsbnRetrieverStrategy.class, Names.named("kuramkitap"))));
         return map;
     }
 
@@ -34,7 +43,8 @@ public class IsbnStrategyProvider {
         catch (MalformedURLException e) {
             Logger.warn(e.getMessage());
         }
-        return new UnavailableStrategy();
+        return InjectorProvider.getInjector()
+                .getInstance(Key.get(IsbnRetrieverStrategy.class, Names.named("unavailable")));
     }
 
     private static String getKey(String stringUrl) throws MalformedURLException {
