@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.ghn1712.guiabolso.books.controllers.BooksController;
@@ -22,11 +23,16 @@ public class ControllerIntegratedTestsCase {
     BooksController controller;
     BooksUsecase usecase;
 
-    @Test
-    public void should_return_empty_list_when_usecase_return_empty_list() {
+    @Before
+    public void set_up() {
         Injector injector = Guice.createInjector(new ControllerModule());
         BooksGateway gateway = injector.getInstance(BooksGateway.class);
         gateway.truncate();
+    }
+
+    @Test
+    public void should_return_empty_list_when_usecase_return_empty_list() {
+        Injector injector = Guice.createInjector(new ControllerModule());
         controller = injector.getInstance(BooksController.class);
         assertTrue(controller.listBooks().isEmpty());
     }
@@ -34,8 +40,6 @@ public class ControllerIntegratedTestsCase {
     @Test
     public void should_return_list_when_usecase_return_list() {
         Injector injector = Guice.createInjector(new BooksModule());
-        BooksGateway gateway = injector.getInstance(BooksGateway.class);
-        gateway.truncate();
         controller = injector.getInstance(BooksController.class);
         List<Book> listBooks = controller.listBooks();
         assertFalse(listBooks.isEmpty());
@@ -46,8 +50,6 @@ public class ControllerIntegratedTestsCase {
     public void should_add_book() {
         Book book = new Book("lalala", "lalala", "1", "9870123456789", "en");
         Injector injector = Guice.createInjector(new BooksModule());
-        BooksGateway gateway = injector.getInstance(BooksGateway.class);
-        gateway.truncate();
         controller = injector.getInstance(BooksController.class);
         assertEquals("1", controller.addBook(book));
     }
@@ -55,8 +57,6 @@ public class ControllerIntegratedTestsCase {
     @Test
     public void should_return_empty_optional_when_usecase_returns_null() {
         Injector injector = Guice.createInjector(new ControllerModule());
-        BooksGateway gateway = injector.getInstance(BooksGateway.class);
-        gateway.truncate();
         controller = injector.getInstance(BooksController.class);
         assertFalse(controller.getBookById("123").isPresent());
     }
@@ -66,7 +66,6 @@ public class ControllerIntegratedTestsCase {
         Book book = new Book("lalala", "lalala", "1", "9870123456789", "en");
         Injector injector = Guice.createInjector(new ControllerModule());
         BooksGateway gateway = injector.getInstance(BooksGateway.class);
-        gateway.truncate();
         gateway.addBook(book);
         controller = injector.getInstance(BooksController.class);
         assertEquals(book, controller.getBookById("1").get());
