@@ -10,8 +10,8 @@ public class AmazonStrategy implements IsbnRetrieverStrategy {
     @Override
     public String execute(String url) {
         try {
-            return Jsoup.connect(url).get().select("div.content li").eachText().parallelStream()
-                    .filter(text -> text.split(" ")[0].equals("ISBN-13:"))
+            return Jsoup.connect(url).header("User-Agent", "Mozilla/5.0").get().select("div.content li").eachText()
+                    .parallelStream().filter(text -> text.split(" ")[0].equals("ISBN-13:"))
                     .map(text -> text.split(" ")[1].replaceAll("-", "")).findAny()
                     .orElse(IsbnRetrieverStrategy.super.execute(url));
         }
