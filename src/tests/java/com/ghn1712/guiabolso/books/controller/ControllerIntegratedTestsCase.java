@@ -43,7 +43,7 @@ public class ControllerIntegratedTestsCase {
         controller = injector.getInstance(BooksController.class);
         List<Book> listBooks = controller.listBooks();
         assertFalse(listBooks.isEmpty());
-        assertEquals(24, listBooks.size());
+        assertEquals(26, listBooks.size());
     }
 
     @Test

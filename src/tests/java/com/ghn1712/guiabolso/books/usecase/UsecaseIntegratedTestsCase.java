@@ -52,7 +52,7 @@ public class UsecaseIntegratedTestsCase {
         Book book = new Book("title", "description", "1", "isbn", "lg");
         gateway.addBook(book);
         List<Book> listBooks = usecase.listBooks();
-        assertEquals(25, listBooks.size());
+        assertEquals(27, listBooks.size());
         assertTrue(listBooks.contains(book));
     }
 
@@ -63,7 +63,7 @@ public class UsecaseIntegratedTestsCase {
         BooksGateway gateway = injector.getInstance(BooksGateway.class);
         gateway.truncate();
         List<Book> listBooks = usecase.listBooks();
-        assertEquals(24, listBooks.size());
+        assertEquals(26, listBooks.size());
     }
 
     @Test

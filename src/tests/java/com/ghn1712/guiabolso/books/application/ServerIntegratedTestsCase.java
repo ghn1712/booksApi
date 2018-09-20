@@ -90,7 +90,7 @@ public class ServerIntegratedTestsCase {
         HttpResponse<String> request = Unirest.get("http://localhost:4567/books").asString();
         assertEquals(HttpStatus.OK_200, request.getStatus());
         BooksListResponse booksListResponse = Serializer.deserialize(request.getBody(), BooksListResponse.class);
-        assertEquals(24, booksListResponse.getNumberBooks());
+        assertEquals(26, booksListResponse.getNumberBooks());
         // TODO assert content
         // assertTrue(booksListReponse.getBooks().containsAll(expected);
     }

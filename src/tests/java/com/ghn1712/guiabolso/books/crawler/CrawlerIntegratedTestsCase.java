@@ -24,7 +24,7 @@ public class CrawlerIntegratedTestsCase {
         Injector injector = Guice.createInjector(new BooksModule());
         crawler = injector.getInstance(BooksListGateway.class);
         List<Book> response = crawler.listBooks();
-        assertEquals(24, response.size());
+        assertEquals(26, response.size());
     }
 
     @Test
@@ -49,7 +49,7 @@ public class CrawlerIntegratedTestsCase {
         crawler.listBooks();
         with().pollDelay(5, TimeUnit.MILLISECONDS).await().atMost(50, TimeUnit.MILLISECONDS).untilAsserted(() -> {
             List<Book> secondResponse = crawler.listBooks();
-            assertEquals(24, secondResponse.size());
+            assertEquals(26, secondResponse.size());
         });
     }
 
@@ -59,7 +59,7 @@ public class CrawlerIntegratedTestsCase {
         crawler = injector.getInstance(BooksListGateway.class);
         with().pollDelay(5, TimeUnit.MILLISECONDS).await().atMost(50, TimeUnit.MILLISECONDS).untilAsserted(() -> {
             List<Book> secondResponse = crawler.listBooks();
-            assertEquals(24, secondResponse.size());
+            assertEquals(26, secondResponse.size());
         });
     }
 }

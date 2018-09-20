@@ -12,8 +12,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 
 import com.ghn1712.guiabolso.books.config.CrawlerConfig;
-import com.ghn1712.guiabolso.books.crawler.IsbnRetrieverContext;
-import com.ghn1712.guiabolso.books.crawler.IsbnStrategyProvider;
+import com.ghn1712.guiabolso.books.crawler.IsbnRetriever;
 import com.ghn1712.guiabolso.books.entities.Book;
 
 public class BooksCrawlerGateway implements BooksListGateway {
@@ -52,19 +51,15 @@ public class BooksCrawlerGateway implements BooksListGateway {
     private List<Book> createBooksList(List<String> booksTitles, List<String> booksDescription, List<String> booksIsbn,
             List<String> booksLanguages) {
         List<Book> books = new ArrayList<>();
-        if (booksDescription.size() == booksTitles.size() && booksDescription.size() == booksIsbn.size()
-                && booksDescription.size() == booksLanguages.size()) {
-            for (int i = 0; i < booksDescription.size(); i++) {
-                books.add(
-                        new Book(booksTitles.get(i), booksDescription.get(i), booksIsbn.get(i), booksLanguages.get(i)));
-            }
+        for (int i = 0; i < booksDescription.size(); i++) {
+            books.add(new Book(booksTitles.get(i), booksDescription.get(i), booksIsbn.get(i), booksLanguages.get(i)));
         }
         return books;
     }
 
     private List<String> getBooksIsbn(Elements booksHtml) {
-        return booksHtml.select(".book-cover-image").parents().eachAttr("abs:href").parallelStream().map(this::getIsbn)
-                .collect(Collectors.toList());
+        return booksHtml.select(".book-cover-image").parents().eachAttr("abs:href").parallelStream()
+                .map(IsbnRetriever::getIsbn).collect(Collectors.toList());
     }
 
     private List<String> getBooksDescription(Elements booksHtml, List<String> booksTitles) {
@@ -81,9 +76,5 @@ public class BooksCrawlerGateway implements BooksListGateway {
     private List<String> getBookTitles(Elements booksHtml) {
         return booksHtml.select("h2").eachText().stream().map(title -> title.split(",")[0].toLowerCase())
                 .collect(Collectors.toList());
-    }
-
-    private String getIsbn(String url) {
-        return IsbnRetrieverContext.getIsbn(url, IsbnStrategyProvider.getStrategy(url));
     }
 }
