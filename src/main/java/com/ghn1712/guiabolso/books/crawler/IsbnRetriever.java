@@ -19,7 +19,7 @@ public class IsbnRetriever {
             if (isbnSplitted.length == 2) {
                 isbn = isbnSplitted[1];
             }
-            return isbn;
+            return isbn.replace("-", "");
         }
         catch (IOException e) {
             throw new UncheckedIOException(e);
